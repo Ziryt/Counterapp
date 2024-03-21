@@ -1,4 +1,4 @@
-package com.ziryt;
+package com.ziryt.counter;
 
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
