@@ -1,8 +1,10 @@
 package com.ziryt.counter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +23,22 @@ public class CounterController {
             Integer limit,
             String color
     ){}
+
+    record CounterRequest(
+            String name,
+            Integer initial_value,
+            Integer current_value,
+            Integer limit,
+            String color
+    ){}
+
+    record UpdateValueRequest(
+            Integer value
+    ){}
+
     private final CounterService counterService;
 
+    @Autowired
     public CounterController(CounterService counterService) {
         this.counterService = counterService;
     }
@@ -33,7 +49,8 @@ public class CounterController {
     }
 
     @GetMapping("{counterId}")
-    public String getCounter(@PathVariable("counterId") Integer id) {
+    @ResponseBody
+    public Counter getCounter(@PathVariable("counterId") Integer id) {
         return counterService.getCounter(id);
     }
 
@@ -42,9 +59,21 @@ public class CounterController {
         counterService.addCounter(request);
     }
 
+    @PostMapping("{counterId}/inc")
+    public Counter incrementValue(@PathVariable("counterId") Integer id,
+                               @RequestBody UpdateValueRequest value){
+        return counterService.updateValue(id, value, true);
+    }
+
+    @PostMapping("{counterId}/dec")
+    public Counter decrementValue(@PathVariable("counterId") Integer id,
+                               @RequestBody UpdateValueRequest request){
+        return counterService.updateValue(id, request, false);
+    }
+
     @PutMapping("{counterId}")
     public void updateCounter(@PathVariable("counterId") Integer id,
-                              @RequestBody NewCounterRequest request){
+                              @RequestBody CounterRequest request){
         counterService.updateCounter(id, request);
     }
 
