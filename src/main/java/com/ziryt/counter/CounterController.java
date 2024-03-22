@@ -1,5 +1,6 @@
 package com.ziryt.counter;
 
+import com.ziryt.DTO.Counter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,32 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import com.ziryt.DTO.Records.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/counters")
 public class CounterController {
-
-    record NewCounterRequest(
-            String name,
-            Integer initial_value,
-            Integer limit,
-            String color
-    ){}
-
-    record CounterRequest(
-            String name,
-            Integer initial_value,
-            Integer current_value,
-            Integer limit,
-            String color
-    ){}
-
-    record UpdateValueRequest(
-            Integer value
-    ){}
-
     private final CounterService counterService;
 
     @Autowired
@@ -54,21 +36,25 @@ public class CounterController {
         return counterService.getCounter(id);
     }
 
-    @PostMapping("/addCounter")
+    @PostMapping("/new")
     public void addCounter(@RequestBody NewCounterRequest request){
         counterService.addCounter(request);
     }
 
-    @PostMapping("{counterId}/inc")
-    public Counter incrementValue(@PathVariable("counterId") Integer id,
-                               @RequestBody UpdateValueRequest value){
-        return counterService.updateValue(id, value, true);
+    @PostMapping("inc/{counterId}")
+    public Counter incrementValue(@PathVariable("counterId") Integer id){
+        return counterService.incrementValue(id);
     }
 
-    @PostMapping("{counterId}/dec")
-    public Counter decrementValue(@PathVariable("counterId") Integer id,
-                               @RequestBody UpdateValueRequest request){
-        return counterService.updateValue(id, request, false);
+    @PostMapping("dec/{counterId}")
+    public Counter decrementValue(@PathVariable("counterId") Integer id){
+        return counterService.decrementValue(id);
+    }
+
+    @PostMapping("set_value/{counterId}")
+    public Counter updateValue(@PathVariable("counterId") Integer id,
+                                  @RequestBody UpdateValueRequest request){
+        return counterService.updateValue(id, request);
     }
 
     @PutMapping("{counterId}")

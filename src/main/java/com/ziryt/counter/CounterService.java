@@ -1,14 +1,12 @@
 package com.ziryt.counter;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.ziryt.DTO.Counter;
+import com.ziryt.exeption.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ziryt.counter.CounterController.NewCounterRequest;
-import com.ziryt.counter.CounterController.CounterRequest;
-import com.ziryt.counter.CounterController.UpdateValueRequest;
+import com.ziryt.DTO.Records.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CounterService {
@@ -20,58 +18,66 @@ public class CounterService {
         this.counterRepository = counterRepository;
     }
 
+    private Counter findCounterById(Integer id) throws NotFoundException{
+        return counterRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Counter with id=" + id + " doesn't exist"));
+    }
+
     public List<Counter> getCounters(){
         return counterRepository.findAll();
     }
 
     public Counter getCounter(Integer id){
-        Optional<Counter> optionalCounter = counterRepository.findById(id);
-        if (optionalCounter.isEmpty()){
-           throw new EntityNotFoundException("Counter with id:" + id + " doesn't exist");
-        }
-        return optionalCounter.get();
+        return findCounterById(id);
     }
 
     public void addCounter(NewCounterRequest request){
         Counter counter = new Counter();
         counter.setName(request.name());
-        counter.setInitial_value(request.initial_value());
-        counter.setCurrent_value(request.initial_value());
-        counter.setLimited(request.limit());
+        counter.setInitialValue(request.initialValue());
+        counter.setCurrentValue(request.initialValue());
+        counter.setTopLimit(request.topLimit());
+        counter.setTopLimit(request.bottomLimit());
         counter.setColor(request.color());
         counterRepository.save(counter);
     }
 
-    public Counter updateValue(Integer id, UpdateValueRequest request, Boolean inc){
-        Optional<Counter> optionalCounter = counterRepository.findById(id);
-        if (optionalCounter.isEmpty()){
-            throw new EntityNotFoundException("Counter with id:" + id + " doesn't exist");
-        }
-        Counter counter = optionalCounter.get();
-        if (inc) {
-            counter.setCurrent_value(counter.getCurrent_value() + request.value());
-        } else {
-            counter.setCurrent_value(counter.getCurrent_value() - request.value());
-        }
+    public Counter incrementValue(Integer id){
+        Counter counter = findCounterById(id);
+        Integer currentValue = counter.getCurrentValue();
+        counter.setCurrentValue(currentValue++);
+        counterRepository.save(counter);
+        return counter;
+    }
+
+    public Counter decrementValue(Integer id){
+        Counter counter = findCounterById(id);
+        Integer currentValue = counter.getCurrentValue();
+        counter.setCurrentValue(currentValue--);
+        counterRepository.save(counter);
+        return counter;
+    }
+
+    public Counter updateValue(Integer id, UpdateValueRequest request){
+        Counter counter = findCounterById(id);
+        counter.setCurrentValue(counter.getCurrentValue() + request.value());
         counterRepository.save(counter);
         return counter;
     }
 
     public void updateCounter(Integer id, CounterRequest request){
-        Optional<Counter> optionalCounter = counterRepository.findById(id);
-        if (optionalCounter.isEmpty()){
-            throw new EntityNotFoundException("Counter with id:" + id + " doesn't exist");
-        }
-        Counter counter = optionalCounter.get();
+        Counter counter = findCounterById(id);
         counter.setName(request.name());
-        counter.setInitial_value(request.initial_value());
-        counter.setCurrent_value(request.current_value());
-        counter.setLimited(request.limit());
+        counter.setInitialValue(request.initialValue());
+        counter.setCurrentValue(request.currentValue());
+        counter.setTopLimit(request.topLimit());
+        counter.setTopLimit(request.bottomLimit());
         counter.setColor(request.color());
         counterRepository.save(counter);
     }
 
     public void deleteCounter(Integer id){
-        counterRepository.deleteById(id);
+        Counter counter = findCounterById(id);
+        counterRepository.delete(counter);
     }
 }
