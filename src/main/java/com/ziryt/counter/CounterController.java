@@ -1,17 +1,22 @@
 package com.ziryt.counter;
 
 import com.ziryt.DTO.Counter;
+import com.ziryt.DTO.Records.CreateCounterRequest;
+import com.ziryt.DTO.Records.UpdateCounterRequest;
+import com.ziryt.DTO.Records.UpdateValueRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import com.ziryt.DTO.Records.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -32,13 +37,15 @@ public class CounterController {
 
     @GetMapping("{counterId}")
     @ResponseBody
-    public Counter getCounter(@PathVariable("counterId") Integer id) {
-        return counterService.getCounter(id);
+    public ResponseEntity<Counter> getCounter(@PathVariable("counterId") Integer id) {
+        Counter counter = counterService.getCounter(id);
+        return ResponseEntity.status(HttpStatus.OK).body(counter);
     }
 
     @PostMapping("/new")
-    public void addCounter(@RequestBody NewCounterRequest request){
-        counterService.addCounter(request);
+    public ResponseEntity<Counter> createCounter(@RequestBody CreateCounterRequest request) {
+        Counter created = counterService.createCounter(request);
+        return ResponseEntity.status(HttpStatus.OK).body(created);
     }
 
     @PostMapping("inc/{counterId}")
@@ -51,16 +58,34 @@ public class CounterController {
         return counterService.decrementValue(id);
     }
 
-    @PostMapping("set_value/{counterId}")
+    @PostMapping("update/{counterId}")
     public Counter updateValue(@PathVariable("counterId") Integer id,
-                                  @RequestBody UpdateValueRequest request){
+                               @RequestBody UpdateValueRequest request) {
         return counterService.updateValue(id, request);
     }
 
+    @PatchMapping("set/{counterId}")
+    public Counter setValue(@PathVariable("counterId") Integer id,
+                            @RequestBody UpdateValueRequest request) {
+        return counterService.setValue(id, request);
+    }
+
+    @PatchMapping("set_top/{counterId}")
+    public Counter setTopLimit(@PathVariable("counterId") Integer id,
+                               @RequestBody UpdateValueRequest request) {
+        return counterService.setTopLimit(id, request);
+    }
+
+    @PatchMapping("set_bot/{counterId}")
+    public Counter setBottomLimit(@PathVariable("counterId") Integer id,
+                                  @RequestBody UpdateValueRequest request) {
+        return counterService.setBottomLimit(id, request);
+    }
+
     @PutMapping("{counterId}")
-    public void updateCounter(@PathVariable("counterId") Integer id,
-                              @RequestBody CounterRequest request){
-        counterService.updateCounter(id, request);
+    public Counter updateCounter(@PathVariable("counterId") Integer id,
+                                 @RequestBody UpdateCounterRequest request) {
+        return counterService.updateCounter(id, request);
     }
 
     @DeleteMapping("{counterId}")

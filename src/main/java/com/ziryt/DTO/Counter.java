@@ -1,17 +1,23 @@
 package com.ziryt.DTO;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.UniqueConstraint;
 
 import java.util.Objects;
 
 @Entity
-@Table
+@Table(
+        name = "counter",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "counter_unique_name", columnNames = "name")
+        }
+)
 public class Counter {
 
     @Id
@@ -24,12 +30,34 @@ public class Counter {
             strategy = GenerationType.SEQUENCE,
             generator = "counter_id_sequence"
     )
+    @Column(
+            name = "id",
+            updatable = false
+    )
     private Integer Id;
-
+    @Column(
+            name = "name",
+            nullable = false,
+            unique = true
+    )
     private String name;
+    @Column(
+            name = "initial_value",
+            nullable = false
+    )
     private Integer initialValue;
+    @Column(
+            name = "current_value",
+            nullable = false
+    )
     private Integer currentValue;
+    @Column(
+            name = "top_limit"
+    )
     private Integer topLimit;
+    @Column(
+            name = "bottom_limit"
+    )
     private Integer bottomLimit;
     private String color;
 

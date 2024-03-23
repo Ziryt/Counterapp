@@ -2,7 +2,7 @@ package com.ziryt.DTO;
 
 public class Records {
 
-    public record NewCounterRequest(
+    public record CreateCounterRequest(
             String name,
             Integer initialValue,
             Integer topLimit,
@@ -10,7 +10,7 @@ public class Records {
             String color
     ){}
 
-    public record CounterRequest(
+    public record UpdateCounterRequest(
             String name,
             Integer initialValue,
             Integer currentValue,
