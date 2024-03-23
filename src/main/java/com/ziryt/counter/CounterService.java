@@ -117,13 +117,13 @@ public class CounterService {
         if (request.initialValue() != null) {
             counter.setInitialValue(request.initialValue());
         }
-        if (request.initialValue() != null) {
+        if (request.currentValue() != null) {
             counter.setCurrentValue(request.currentValue());
         }
-        if (request.initialValue() != null) {
+        if (request.topLimit() != null) {
             counter.setTopLimit(request.topLimit());
         }
-        if (request.initialValue() != null) {
+        if (request.bottomLimit() != null) {
             counter.setBottomLimit(request.bottomLimit());
         }
         if (request.color() != null) {
