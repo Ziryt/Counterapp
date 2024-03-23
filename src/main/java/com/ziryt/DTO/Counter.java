@@ -8,8 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(
@@ -18,6 +20,10 @@ import java.util.Objects;
                 @UniqueConstraint(name = "counter_unique_name", columnNames = "name")
         }
 )
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Counter {
 
     @Id
@@ -60,31 +66,6 @@ public class Counter {
     )
     private Integer bottomLimit;
     private String color;
-
-    public Counter(Integer id,
-                   String name,
-                   Integer initialValue,
-                   Integer currentValue,
-                   Integer topLimit,
-                   String color) {
-        Id = id;
-        this.name = name;
-        this.initialValue = initialValue;
-        this.currentValue = currentValue;
-        this.topLimit = topLimit;
-        this.color = color;
-    }
-
-    public Counter() {
-    }
-
-    public Integer getId() {
-        return Id;
-    }
-
-    public void setId(Integer id) {
-        Id = id;
-    }
 
     public String getName() {
         return name;
@@ -134,35 +115,4 @@ public class Counter {
         this.color = color;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Counter counter = (Counter) o;
-        return Objects.equals(Id, counter.Id)
-                && Objects.equals(name, counter.name)
-                && Objects.equals(initialValue, counter.initialValue)
-                && Objects.equals(currentValue, counter.currentValue)
-                && Objects.equals(topLimit, counter.topLimit)
-                && Objects.equals(bottomLimit, counter.bottomLimit)
-                && Objects.equals(color, counter.color);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(Id, name, initialValue, currentValue, topLimit, bottomLimit, color);
-    }
-
-    @Override
-    public String toString() {
-        return "Counter{" +
-                "Id=" + Id +
-                ", name='" + name + '\'' +
-                ", initial value=" + initialValue +
-                ", current value=" + currentValue +
-                ", top limit=" + topLimit +
-                ", bottom limit=" + bottomLimit +
-                ", color='" + color + '\'' +
-                '}';
-    }
 }

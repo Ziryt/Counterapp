@@ -6,7 +6,7 @@ import com.ziryt.DTO.Records.UpdateCounterRequest;
 import com.ziryt.DTO.Records.UpdateValueRequest;
 import com.ziryt.exeption.ExceedLimitException;
 import com.ziryt.exeption.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +14,10 @@ import java.util.List;
 ;
 
 @Service
+@AllArgsConstructor
 public class CounterService {
 
     private final CounterRepository counterRepository;
-
-    @Autowired
-    public CounterService(CounterRepository counterRepository) {
-        this.counterRepository = counterRepository;
-    }
 
     private Counter findCounterById(Integer id) throws NotFoundException{
         return counterRepository.findById(id).orElseThrow(
@@ -50,7 +46,7 @@ public class CounterService {
     public Counter incrementValue(Integer id){
         Counter counter = findCounterById(id);
         Integer currentValue = counter.getCurrentValue();
-        if (currentValue >= 2147483647) {
+        if (currentValue >= Integer.MAX_VALUE) {
             throw new ExceedLimitException("Counter reached maximum possible integer value");
         }
         Integer limit = counter.getTopLimit();
@@ -66,7 +62,7 @@ public class CounterService {
     public Counter decrementValue(Integer id){
         Counter counter = findCounterById(id);
         Integer currentValue = counter.getCurrentValue();
-        if (currentValue <= -2147483648) {
+        if (currentValue <= Integer.MIN_VALUE) {
             throw new ExceedLimitException("Counter reached minimum possible integer value");
         }
         Integer limit = counter.getBottomLimit();
@@ -83,7 +79,7 @@ public class CounterService {
         Counter counter = findCounterById(id);
         long currentValue = counter.getCurrentValue().longValue();
         long sum = currentValue + request.value().longValue();
-        if (sum > -2147483648 && sum < 2147483647) {
+        if (sum > Integer.MIN_VALUE && sum < Integer.MAX_VALUE) {
             counter.setCurrentValue(Long.valueOf(sum).intValue());
             return counterRepository.save(counter);
         } else {
