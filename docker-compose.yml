@@ -1,4 +1,26 @@
 services:
+  app-counter:
+    depends_on:
+      - db-counter
+    container_name: application
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/counter
+      - SPRING_DATASOURCE_USERNAME=ziryt
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    volumes:
+      - vol1:/data/app
+    ports:
+      - "8080:8080"
+    networks:
+      - net1
+    restart: unless-stopped
+
   db-counter:
     container_name: postgres
     image: postgres
@@ -7,16 +29,16 @@ services:
       POSTGRES_PASSWORD: 123456
       PGDATA: data/postgres
     volumes:
-      - db:/data/postgres
+      - vol1:/data
     ports:
       - "5332:5432"
     networks:
-      - db
+      - net1
     restart: unless-stopped
 
 networks:
-  db:
+  net1:
     driver: bridge
 
 volumes:
-  db:
+  vol1:
