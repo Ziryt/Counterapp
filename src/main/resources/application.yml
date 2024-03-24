@@ -2,6 +2,10 @@ server:
   port: 8080
 
 spring:
+  logging:
+    level:
+      io:
+        javabrains: TRACE
   datasource:
     url: jdbc:postgresql://localhost:5332/counter
     username: ziryt # ofc this shouldn't be published

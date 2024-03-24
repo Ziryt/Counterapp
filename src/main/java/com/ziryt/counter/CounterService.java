@@ -4,9 +4,13 @@ import com.ziryt.DTO.Counter;
 import com.ziryt.DTO.Records.CreateCounterRequest;
 import com.ziryt.DTO.Records.UpdateCounterRequest;
 import com.ziryt.DTO.Records.UpdateValueRequest;
-import com.ziryt.exeption.ExceedLimitException;
-import com.ziryt.exeption.NotFoundException;
+import com.ziryt.exception.ExceedBottomLimitException;
+import com.ziryt.exception.ExceedIntegerException;
+import com.ziryt.exception.ExceedTopLimitException;
+import com.ziryt.exception.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,21 +22,26 @@ import java.util.List;
 public class CounterService {
 
     private final CounterRepository counterRepository;
+    private final Logger logger = LoggerFactory.getLogger(CounterController.class);
 
     private Counter findCounterById(Integer id) throws NotFoundException{
+        logger.trace("find counter by id={}", id);
         return counterRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Counter with id=" + id + " doesn't exist"));
+                () -> new NotFoundException("Counter with id=" + id + " doesn't exist", id));
     }
 
     public List<Counter> getCounters(){
+        logger.trace("getCounters method called");
         return counterRepository.findAll();
     }
 
     public Counter getCounter(Integer id){
+        logger.trace("getCounter method called");
         return findCounterById(id);
     }
 
     public Counter createCounter(CreateCounterRequest request) {
+        logger.trace("createCounter method called");
         Counter counter = new Counter();
         counter.setName(request.name());
         counter.setInitialValue(request.initialValue());
@@ -44,15 +53,16 @@ public class CounterService {
     }
 
     public Counter incrementValue(Integer id){
+        logger.trace("incrementValue method called");
         Counter counter = findCounterById(id);
         Integer currentValue = counter.getCurrentValue();
         if (currentValue >= Integer.MAX_VALUE) {
-            throw new ExceedLimitException("Counter reached maximum possible integer value");
+            throw new ExceedIntegerException("Counter reached maximum possible integer value", currentValue, id);
         }
         Integer limit = counter.getTopLimit();
         if (limit != null && currentValue >= limit) {
-            throw new ExceedLimitException("Counter can not be higher than top limit\n" +
-                    "Top limit: " + limit);
+            throw new ExceedTopLimitException("Counter can not be higher than top limit\n" +
+                    "Top limit: " + limit, currentValue, id);
         } else {
             counter.setCurrentValue(++currentValue);
             return counterRepository.save(counter);
@@ -60,15 +70,16 @@ public class CounterService {
     }
 
     public Counter decrementValue(Integer id){
+        logger.trace("decrementValue method called");
         Counter counter = findCounterById(id);
         Integer currentValue = counter.getCurrentValue();
         if (currentValue <= Integer.MIN_VALUE) {
-            throw new ExceedLimitException("Counter reached minimum possible integer value");
+            throw new ExceedIntegerException("Counter reached minimum possible integer value", currentValue, id);
         }
         Integer limit = counter.getBottomLimit();
         if (limit != null && currentValue <= limit) {
-            throw new ExceedLimitException("Counter can not be lower than bottom limit\n" +
-                    "Bottom limit: " + limit);
+            throw new ExceedBottomLimitException("Counter can not be lower than bottom limit\n" +
+                    "Bottom limit: " + limit, currentValue, id);
         } else {
             counter.setCurrentValue(--currentValue);
             return counterRepository.save(counter);
@@ -76,6 +87,7 @@ public class CounterService {
     }
 
     public Counter updateValue(Integer id, UpdateValueRequest request){
+        logger.trace("updateValue method called");
         Counter counter = findCounterById(id);
         long currentValue = counter.getCurrentValue().longValue();
         long sum = currentValue + request.value().longValue();
@@ -83,12 +95,13 @@ public class CounterService {
             counter.setCurrentValue(Long.valueOf(sum).intValue());
             return counterRepository.save(counter);
         } else {
-            throw new ExceedLimitException(currentValue + " + " + request.value() +
-                    " is outside of Integer boundaries");
+            throw new ExceedIntegerException(currentValue + " + " + request.value() +
+                    " is outside of Integer boundaries", sum, id);
         }
     }
 
     public Counter setValue(Integer id, UpdateValueRequest request) {
+        logger.trace("setValue method called");
         Counter counter = findCounterById(id);
         counter.setCurrentValue(request.value());
         counterRepository.save(counter);
@@ -96,6 +109,7 @@ public class CounterService {
     }
 
     public Counter setTopLimit(Integer id, UpdateValueRequest request) {
+        logger.trace("setTopLimit method called");
         Counter counter = findCounterById(id);
         counter.setTopLimit(request.value());
         counterRepository.save(counter);
@@ -103,6 +117,7 @@ public class CounterService {
     }
 
     public Counter setBottomLimit(Integer id, UpdateValueRequest request) {
+        logger.trace("setBottomLimit method called");
         Counter counter = findCounterById(id);
         counter.setBottomLimit(request.value());
         counterRepository.save(counter);
@@ -110,6 +125,7 @@ public class CounterService {
     }
 
     public Counter updateCounter(Integer id, UpdateCounterRequest request) {
+        logger.trace("updateCounter method called");
         Counter counter = findCounterById(id);
         if (request.name() != null) {
             counter.setName(request.name());
@@ -133,6 +149,7 @@ public class CounterService {
     }
 
     public void deleteCounter(Integer id){
+        logger.trace("deleteCounter method called");
         Counter counter = findCounterById(id);
         counterRepository.delete(counter);
     }
