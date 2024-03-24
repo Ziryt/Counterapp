@@ -63,7 +63,20 @@ public class ApiRequestExceptionHandler {
         return new ResponseEntity<>(apiException, status);
     }
 
-    @ExceptionHandler(value = {HttpMessageNotReadableException.class, PropertyValueException.class})
+    @ExceptionHandler(value = {NotUniqueNameException.class})
+    public ResponseEntity<Object> handleNotUniqueNameException(NotUniqueNameException e) {
+        logger.warn("Not unique name was provided for new counter");
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ApiException apiException = new ApiException(
+                status,
+                e.getMessage(),
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, status);
+    }
+
+    @ExceptionHandler(value = {HttpMessageNotReadableException.class,
+            PropertyValueException.class})
     public ResponseEntity<Object> handleValidationExceptions(Exception e) {
         logger.warn("invalid data format was sent");
         HttpStatus status = HttpStatus.BAD_REQUEST;

@@ -8,6 +8,7 @@ import com.ziryt.exception.ExceedBottomLimitException;
 import com.ziryt.exception.ExceedIntegerException;
 import com.ziryt.exception.ExceedTopLimitException;
 import com.ziryt.exception.NotFoundException;
+import com.ziryt.exception.NotUniqueNameException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,9 @@ public class CounterService {
     public Counter createCounter(CreateCounterRequest request) {
         logger.trace("createCounter method called");
         Counter counter = new Counter();
+        if (counterRepository.findByName(request.name()) != null){
+            throw new NotUniqueNameException("Counter with provided name already exist");
+        }
         counter.setName(request.name());
         counter.setInitialValue(request.initialValue());
         counter.setCurrentValue(request.initialValue());
