@@ -12,6 +12,11 @@ jobs:
         run: |
           docker login --username ziryt --password ${{secrets.GH_PAT}} ghcr.io
 
+      - uses: actions/setup-java@v4
+      - name: Prepare build
+        run: |
+          mvn clean install
+
       - name: Build
         run: |
           docker build . --tag ghcr.io/ziryt/counter-app:latest
