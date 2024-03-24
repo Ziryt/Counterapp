@@ -1,6 +1,7 @@
 package com.ziryt.exception;
 
 import com.ziryt.counter.CounterController;
+import org.hibernate.PropertyValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -62,8 +63,8 @@ public class ApiRequestExceptionHandler {
         return new ResponseEntity<>(apiException, status);
     }
 
-    @ExceptionHandler(value = {HttpMessageNotReadableException.class})
-    public ResponseEntity<Object> handleValidationExceptions(HttpMessageNotReadableException e) {
+    @ExceptionHandler(value = {HttpMessageNotReadableException.class, PropertyValueException.class})
+    public ResponseEntity<Object> handleValidationExceptions(Exception e) {
         logger.warn("invalid data format was sent");
         HttpStatus status = HttpStatus.BAD_REQUEST;
         ApiException apiException = new ApiException(
