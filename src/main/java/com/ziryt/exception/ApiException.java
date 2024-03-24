@@ -1,4 +1,4 @@
-package com.ziryt.exeption;
+package com.ziryt.exception;
 
 import org.springframework.http.HttpStatus;
 
