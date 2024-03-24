@@ -24,6 +24,6 @@ jobs:
         run: |
           docker build . --tag ghcr.io/ziryt/counter-app:latest
 
-      - name: Build
+      - name: Push
         run: |
           docker push ghcr.io/ziryt/counter-app:latest
