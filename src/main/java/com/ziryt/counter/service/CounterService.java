@@ -92,7 +92,7 @@ public class CounterService {
         }
     }
 
-    public Counter updateValue(Integer id, UpdateValueRequest request){
+    public Counter updateValueBy(Integer id, UpdateValueRequest request){
         logger.trace("updateValue method called");
         Counter counter = findCounterById(id);
         long currentValue = counter.getCurrentValue().longValue();

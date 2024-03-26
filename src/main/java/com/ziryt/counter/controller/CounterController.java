@@ -30,7 +30,7 @@ public class CounterController {
     private final CounterService counterService;
     private final Logger logger = LoggerFactory.getLogger(CounterController.class);
 
-    @GetMapping()
+    @GetMapping("/")
     public List<Counter> getCounters() {
         logger.trace("get all counters");
         return counterService.getCounters();
@@ -44,47 +44,47 @@ public class CounterController {
         return ResponseEntity.status(HttpStatus.OK).body(counter);
     }
 
-    @PostMapping("/new")
+    @PostMapping("/")
     public ResponseEntity<Counter> createCounter(@RequestBody CreateCounterRequest request) {
         logger.trace("create counter with name={}", request.name());
         Counter created = counterService.createCounter(request);
         return ResponseEntity.status(HttpStatus.OK).body(created);
     }
 
-    @PostMapping("inc/{counterId}")
+    @PostMapping("{counterId}/inc")
     public Counter incrementValue(@PathVariable("counterId") Integer id){
         logger.trace("increment value for counter with id={}", id);
         return counterService.incrementValue(id);
     }
 
-    @PostMapping("dec/{counterId}")
+    @PostMapping("{counterId}/dec")
     public Counter decrementValue(@PathVariable("counterId") Integer id){
         logger.trace("decrement value for counter with id={}", id);
         return counterService.decrementValue(id);
     }
 
-    @PostMapping("update/{counterId}")
-    public Counter updateValue(@PathVariable("counterId") Integer id,
-                               @RequestBody UpdateValueRequest request) {
+    @PostMapping("{counterId}/update_by")
+    public Counter updateValueBy(@PathVariable("counterId") Integer id,
+                                 @RequestBody UpdateValueRequest request) {
         logger.trace("update value for counter with id={}", id);
-        return counterService.updateValue(id, request);
+        return counterService.updateValueBy(id, request);
     }
 
-    @PatchMapping("set/{counterId}")
+    @PatchMapping("{counterId}/set")
     public Counter setValue(@PathVariable("counterId") Integer id,
                             @RequestBody UpdateValueRequest request) {
         logger.trace("set value for counter with id={}", id);
         return counterService.setValue(id, request);
     }
 
-    @PatchMapping("set_top/{counterId}")
+    @PatchMapping("{counterId}/set_top_limit")
     public Counter setTopLimit(@PathVariable("counterId") Integer id,
                                @RequestBody UpdateValueRequest request) {
         logger.trace("set top limit for counter with id={}", id);
         return counterService.setTopLimit(id, request);
     }
 
-    @PatchMapping("set_bot/{counterId}")
+    @PatchMapping("{counterId}/set_bottom_limit")
     public Counter setBottomLimit(@PathVariable("counterId") Integer id,
                                   @RequestBody UpdateValueRequest request) {
         logger.trace("set bottom limit for counter with id={}", id);
