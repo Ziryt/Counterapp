@@ -1,9 +1,6 @@
 package com.ziryt.counter.service;
 
 import com.ziryt.counter.model.entity.Counter;
-import com.ziryt.counter.model.DTO.Records.CreateCounterRequest;
-import com.ziryt.counter.model.DTO.Records.UpdateCounterRequest;
-import com.ziryt.counter.model.DTO.Records.UpdateValueRequest;
 import com.ziryt.counter.controller.CounterController;
 import com.ziryt.counter.repository.CounterRepository;
 import com.ziryt.counter.exception.ExceedBottomLimitException;
