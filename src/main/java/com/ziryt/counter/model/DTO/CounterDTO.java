@@ -1,4 +1,4 @@
-package com.ziryt.counter.model.dto;
+package com.ziryt.counter.model.DTO;
 
 public record CounterDTO (
         Integer Id,
