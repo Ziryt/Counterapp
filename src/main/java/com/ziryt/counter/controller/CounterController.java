@@ -38,17 +38,15 @@ public class CounterController {
 
     @GetMapping("{counterId}")
     @ResponseBody
-    public ResponseEntity<Counter> getCounter(@PathVariable("counterId") Integer id) {
+    public Counter getCounter(@PathVariable("counterId") Integer id) {
         logger.trace("get counter with id={}", id);
-        Counter counter = counterService.getCounter(id);
-        return ResponseEntity.status(HttpStatus.OK).body(counter);
+        return counterService.getCounter(id);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Counter> createCounter(@RequestBody CreateCounterRequest request) {
+    public Counter createCounter(@RequestBody CreateCounterRequest request) {
         logger.trace("create counter with name={}", request.name());
-        Counter created = counterService.createCounter(request);
-        return ResponseEntity.status(HttpStatus.OK).body(created);
+        return counterService.createCounter(request);
     }
 
     @PostMapping("{counterId}/inc")
