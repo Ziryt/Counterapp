@@ -1,4 +1,4 @@
-package com.ziryt.DTO;
+package com.ziryt.counter.model.DTO;
 
 public class Records {
 

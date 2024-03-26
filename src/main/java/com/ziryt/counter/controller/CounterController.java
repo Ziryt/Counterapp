@@ -1,9 +1,10 @@
-package com.ziryt.counter;
+package com.ziryt.counter.controller;
 
-import com.ziryt.DTO.Counter;
-import com.ziryt.DTO.Records.CreateCounterRequest;
-import com.ziryt.DTO.Records.UpdateCounterRequest;
-import com.ziryt.DTO.Records.UpdateValueRequest;
+import com.ziryt.counter.model.entity.Counter;
+import com.ziryt.counter.model.DTO.Records.CreateCounterRequest;
+import com.ziryt.counter.model.DTO.Records.UpdateCounterRequest;
+import com.ziryt.counter.model.DTO.Records.UpdateValueRequest;
+import com.ziryt.counter.service.CounterService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

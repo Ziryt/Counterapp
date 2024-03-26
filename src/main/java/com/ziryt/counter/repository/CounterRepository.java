@@ -1,6 +1,6 @@
-package com.ziryt.counter;
+package com.ziryt.counter.repository;
 
-import com.ziryt.DTO.Counter;
+import com.ziryt.counter.model.entity.Counter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

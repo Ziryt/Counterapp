@@ -1,6 +1,6 @@
-package com.ziryt.exception;
+package com.ziryt.counter.exception;
 
-import com.ziryt.counter.CounterController;
+import com.ziryt.counter.controller.CounterController;
 import org.hibernate.PropertyValueException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

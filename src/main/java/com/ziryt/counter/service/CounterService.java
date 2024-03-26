@@ -1,14 +1,16 @@
-package com.ziryt.counter;
+package com.ziryt.counter.service;
 
-import com.ziryt.DTO.Counter;
-import com.ziryt.DTO.Records.CreateCounterRequest;
-import com.ziryt.DTO.Records.UpdateCounterRequest;
-import com.ziryt.DTO.Records.UpdateValueRequest;
-import com.ziryt.exception.ExceedBottomLimitException;
-import com.ziryt.exception.ExceedIntegerException;
-import com.ziryt.exception.ExceedTopLimitException;
-import com.ziryt.exception.NotFoundException;
-import com.ziryt.exception.NotUniqueNameException;
+import com.ziryt.counter.model.entity.Counter;
+import com.ziryt.counter.model.DTO.Records.CreateCounterRequest;
+import com.ziryt.counter.model.DTO.Records.UpdateCounterRequest;
+import com.ziryt.counter.model.DTO.Records.UpdateValueRequest;
+import com.ziryt.counter.controller.CounterController;
+import com.ziryt.counter.repository.CounterRepository;
+import com.ziryt.counter.exception.ExceedBottomLimitException;
+import com.ziryt.counter.exception.ExceedIntegerException;
+import com.ziryt.counter.exception.ExceedTopLimitException;
+import com.ziryt.counter.exception.NotFoundException;
+import com.ziryt.counter.exception.NotUniqueNameException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

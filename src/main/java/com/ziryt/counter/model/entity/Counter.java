@@ -1,4 +1,4 @@
-package com.ziryt.DTO;
+package com.ziryt.counter.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
