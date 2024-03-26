@@ -1,12 +1,13 @@
 package com.ziryt.counter.controller;
 
+import com.ziryt.counter.model.DTO.CreateCounterRequest;
+import com.ziryt.counter.model.DTO.UpdateCounterRequest;
+import com.ziryt.counter.model.DTO.UpdateValueRequest;
 import com.ziryt.counter.model.entity.Counter;
 import com.ziryt.counter.service.CounterService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;

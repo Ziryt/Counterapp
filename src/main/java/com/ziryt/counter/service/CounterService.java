@@ -1,5 +1,8 @@
 package com.ziryt.counter.service;
 
+import com.ziryt.counter.model.DTO.CreateCounterRequest;
+import com.ziryt.counter.model.DTO.UpdateCounterRequest;
+import com.ziryt.counter.model.DTO.UpdateValueRequest;
 import com.ziryt.counter.model.entity.Counter;
 import com.ziryt.counter.controller.CounterController;
 import com.ziryt.counter.repository.CounterRepository;
