@@ -1,12 +1,15 @@
 package com.ziryt.counter.exception;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.http.HttpStatusCode;
+
 
 import java.time.ZonedDateTime;
 
 public record ApiException(
-        HttpStatus status,
-        String message,
-        ZonedDateTime timestamp
+        ZonedDateTime timestamp,
+        int statusCode,
+        HttpStatusCode status,
+        String message
 ) {
 }
