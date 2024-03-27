@@ -30,7 +30,7 @@ docker compose up
 #### requirements:
 ```text
 - java 21
-- docker (DB cofigured with it, so it is still required)
+- docker (DB cofigured with it, but you can configure it any other way if you willing to)
 - preferable IDE
 ```
 #### run
