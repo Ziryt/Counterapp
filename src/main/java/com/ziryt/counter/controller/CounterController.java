@@ -7,6 +7,7 @@ import com.ziryt.counter.model.DTO.UpdateCounterRequest;
 import com.ziryt.counter.model.DTO.UpdateValueRequest;
 import com.ziryt.counter.model.mapper.Mapper;
 import com.ziryt.counter.service.CounterService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/counters")
 @Slf4j
 @RequiredArgsConstructor
+@Tag(name = "Endpoints")
 public class CounterController {
 
     private final CounterService counterService;

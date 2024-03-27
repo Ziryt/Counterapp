@@ -63,7 +63,7 @@ public class CounterService {
     }
 
     private void checkTopLimit(int id, int value, Integer limit){
-        if (limit != null && value >     limit) {
+        if (limit != null && value > limit) {
             throw new ExceedTopLimitException(
                     "Counter can not be higher than top limit\n" +
                             "Top limit: " + limit, value, id);

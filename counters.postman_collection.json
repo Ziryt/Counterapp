@@ -24,7 +24,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters",
+					"raw": "localhost:8080/api/v1/counters/?page=0&size=10",
 					"host": [
 						"localhost"
 					],
@@ -32,7 +32,18 @@
 					"path": [
 						"api",
 						"v1",
-						"counters"
+						"counters",
+						""
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
 					]
 				}
 			},
@@ -82,7 +93,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"counter {{$randomWord}}\",\n    \"initialValue\": {{rand_num}}\n    //\"topLimit\": {{top_lim}},\n    //\"bottomLimit\": {{bot_lim}},\n    // \"color\": \"{{$randomColor}}\"\n}",
+					"raw": "{\n    \"name\": \"counter {{$randomWord}}\",\n    \"initialValue\": {{rand_num}}\n    // \"topLimit\": {{top_lim}},\n    // \"bottomLimit\": {{bot_lim}},\n    // \"color\": \"{{$randomColor}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -90,7 +101,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/new",
+					"raw": "localhost:8080/api/v1/counters/",
 					"host": [
 						"localhost"
 					],
@@ -99,7 +110,7 @@
 						"api",
 						"v1",
 						"counters",
-						"new"
+						""
 					]
 				}
 			},
@@ -132,7 +143,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/inc/1",
+					"raw": "localhost:8080/api/v1/counters/1/inc",
 					"host": [
 						"localhost"
 					],
@@ -141,8 +152,8 @@
 						"api",
 						"v1",
 						"counters",
-						"inc",
-						"1"
+						"1",
+						"inc"
 					]
 				}
 			},
@@ -175,7 +186,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/dec/1",
+					"raw": "localhost:8080/api/v1/counters/1/dec",
 					"host": [
 						"localhost"
 					],
@@ -184,15 +195,15 @@
 						"api",
 						"v1",
 						"counters",
-						"dec",
-						"1"
+						"1",
+						"dec"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "update value",
+			"name": "update by value",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -210,7 +221,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"value\": 2\n}",
+					"raw": "{\n    \"value\": -13\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -218,7 +229,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/update/2",
+					"raw": "localhost:8080/api/v1/counters/3/update_by",
 					"host": [
 						"localhost"
 					],
@@ -227,8 +238,8 @@
 						"api",
 						"v1",
 						"counters",
-						"update",
-						"2"
+						"3",
+						"update_by"
 					]
 				}
 			},
@@ -249,11 +260,11 @@
 				}
 			],
 			"request": {
-				"method": "PATCH",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"value\": 15\n}",
+					"raw": "{\n    \"value\": 52\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -261,7 +272,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/set/1",
+					"raw": "localhost:8080/api/v1/counters/1/value",
 					"host": [
 						"localhost"
 					],
@@ -270,15 +281,15 @@
 						"api",
 						"v1",
 						"counters",
-						"set",
-						"1"
+						"1",
+						"value"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "set top limit",
+			"name": "set limits",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -292,11 +303,11 @@
 				}
 			],
 			"request": {
-				"method": "PATCH",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"value\": 75\n}",
+					"raw": "{\n    \"topLimit\": 41,\n    \"bottomLimit\": 32\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -304,7 +315,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/set_top/1",
+					"raw": "localhost:8080/api/v1/counters/1/limits",
 					"host": [
 						"localhost"
 					],
@@ -313,51 +324,8 @@
 						"api",
 						"v1",
 						"counters",
-						"set_top",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "set bottom limit",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"value\": 55\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/counters/set_bot/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"counters",
-						"set_bot",
-						"1"
+						"1",
+						"limits"
 					]
 				}
 			},
