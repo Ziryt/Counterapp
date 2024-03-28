@@ -5,7 +5,6 @@ import com.ziryt.counter.model.DTO.CreateCounterRequest;
 import com.ziryt.counter.model.DTO.SetLimitsRequest;
 import com.ziryt.counter.model.DTO.UpdateCounterRequest;
 import com.ziryt.counter.model.DTO.UpdateValueRequest;
-import com.ziryt.counter.model.mapper.Mapper;
 import com.ziryt.counter.service.CounterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,7 +26,7 @@ import static com.ziryt.counter.model.mapper.Mapper.entityToDTO;
 import static com.ziryt.counter.model.mapper.Mapper.pageEntityToDTO;
 
 @RestController
-@RequestMapping("api/v1/counters")
+@RequestMapping("api/v2/counters")
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "Endpoints")
@@ -67,21 +67,21 @@ public class CounterController {
         return entityToDTO(counterService.decrementValue(id));
     }
 
-    @PostMapping("{counterId}/update_by")
+    @PostMapping("{counterId}/value")
     public CounterDTO updateValueBy(@PathVariable("counterId") Integer id,
                                  @RequestBody UpdateValueRequest request) {
         log.debug("update value for counter with id={}", id);
         return entityToDTO(counterService.updateValueBy(id, request));
     }
 
-    @PostMapping("{counterId}/value")
+    @PutMapping("{counterId}/value")
     public CounterDTO setValue(@PathVariable("counterId") Integer id,
                             @RequestBody UpdateValueRequest request) {
         log.debug("set value for counter with id={}", id);
         return entityToDTO(counterService.setValue(id, request));
     }
 
-    @PostMapping("{counterId}/limits")
+    @PatchMapping("{counterId}/limits")
     public CounterDTO setLimit(@PathVariable("counterId") Integer id,
                                @RequestBody SetLimitsRequest request) {
         log.debug("set limits for counter with id={}", id);

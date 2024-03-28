@@ -229,7 +229,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/3/update_by",
+					"raw": "localhost:8080/api/v1/counters/3/value",
 					"host": [
 						"localhost"
 					],
@@ -239,7 +239,7 @@
 						"v1",
 						"counters",
 						"3",
-						"update_by"
+						"value"
 					]
 				}
 			},
@@ -260,7 +260,7 @@
 				}
 			],
 			"request": {
-				"method": "POST",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",

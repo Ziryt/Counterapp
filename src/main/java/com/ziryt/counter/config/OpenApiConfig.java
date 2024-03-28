@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tags;
         info = @Info(
                 title = "Counter App Documentation",
                 description = "This is a demo app that allows to create and work with counters",
-                version = "1.1"
+                version = "2.0"
         ),
         servers = @Server(
                 url = "http://localhost:8080"
