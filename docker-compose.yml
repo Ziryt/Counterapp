@@ -7,7 +7,7 @@ services:
     build:
       dockerfile: Dockerfile
     environment:
-      - LOGGING_LEVEL_IO_JAVABRAINS=TRACE
+      - LOGGING_LEVEL_COM_ZIRYT=INFO
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/counter
       - SPRING_DATASOURCE_USERNAME=ziryt
       - SPRING_DATASOURCE_PASSWORD=123456
