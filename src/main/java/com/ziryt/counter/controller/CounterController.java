@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.ziryt.counter.model.mapper.Mapper.entityToDTO;
+import static com.ziryt.counter.model.mapper.Mapper.pageEntityToDTO;
+
 @RestController
 @RequestMapping("api/v1/counters")
 @Slf4j
@@ -36,60 +39,60 @@ public class CounterController {
             @RequestParam(defaultValue = "0", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int size) {
         log.debug("get all counters");
-        return Mapper.pageEntityToDTO(counterService.getCounters(page, size));
+        return pageEntityToDTO(counterService.getCounters(page, size));
     }
 
     @GetMapping("{counterId}")
     @ResponseBody
     public CounterDTO getCounter(@PathVariable("counterId") Integer id) {
         log.debug("get counter with id={}", id);
-        return Mapper.entityToDTO(counterService.getCounter(id));
+        return entityToDTO(counterService.getCounter(id));
     }
 
     @PostMapping("/")
     public CounterDTO createCounter(@RequestBody CreateCounterRequest request) {
         log.debug("create counter with name={}", request.name());
-        return Mapper.entityToDTO(counterService.createCounter(request));
+        return entityToDTO(counterService.createCounter(request));
     }
 
     @PostMapping("{counterId}/inc")
     public CounterDTO incrementValue(@PathVariable("counterId") Integer id){
         log.debug("increment value for counter with id={}", id);
-        return Mapper.entityToDTO(counterService.incrementValue(id));
+        return entityToDTO(counterService.incrementValue(id));
     }
 
     @PostMapping("{counterId}/dec")
     public CounterDTO decrementValue(@PathVariable("counterId") Integer id){
         log.debug("decrement value for counter with id={}", id);
-        return Mapper.entityToDTO(counterService.decrementValue(id));
+        return entityToDTO(counterService.decrementValue(id));
     }
 
     @PostMapping("{counterId}/update_by")
     public CounterDTO updateValueBy(@PathVariable("counterId") Integer id,
                                  @RequestBody UpdateValueRequest request) {
         log.debug("update value for counter with id={}", id);
-        return Mapper.entityToDTO(counterService.updateValueBy(id, request));
+        return entityToDTO(counterService.updateValueBy(id, request));
     }
 
     @PostMapping("{counterId}/value")
     public CounterDTO setValue(@PathVariable("counterId") Integer id,
                             @RequestBody UpdateValueRequest request) {
         log.debug("set value for counter with id={}", id);
-        return Mapper.entityToDTO(counterService.setValue(id, request));
+        return entityToDTO(counterService.setValue(id, request));
     }
 
     @PostMapping("{counterId}/limits")
     public CounterDTO setLimit(@PathVariable("counterId") Integer id,
                                @RequestBody SetLimitsRequest request) {
         log.debug("set limits for counter with id={}", id);
-        return Mapper.entityToDTO(counterService.setLimit(id, request));
+        return entityToDTO(counterService.setLimit(id, request));
     }
 
     @PutMapping("{counterId}")
     public CounterDTO updateCounter(@PathVariable("counterId") Integer id,
                                  @RequestBody UpdateCounterRequest request) {
         log.debug("update counter with id={}", id);
-        return Mapper.entityToDTO(counterService.updateCounter(id, request));
+        return entityToDTO(counterService.updateCounter(id, request));
     }
 
     @DeleteMapping("{counterId}")
