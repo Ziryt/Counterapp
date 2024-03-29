@@ -24,14 +24,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/?page=0&size=10",
+					"raw": "localhost:8080/api/v2/counters/?page=0&size=10",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						""
 					],
@@ -55,14 +55,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/1",
+					"raw": "localhost:8080/api/v2/counters/1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"1"
 					]
@@ -93,7 +93,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"counter {{$randomWord}}\",\n    \"initialValue\": {{rand_num}}\n    // \"topLimit\": {{top_lim}},\n    // \"bottomLimit\": {{bot_lim}},\n    // \"color\": \"{{$randomColor}}\"\n}",
+					"raw": "{\n    \"name\": \"counter {{$randomWord}}\",\n    \"initialValue\": {{rand_num}},\n    \"topLimit\": {{top_lim}},\n    \"bottomLimit\": {{bot_lim}},\n    \"color\": \"{{$randomColor}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,14 +101,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/",
+					"raw": "localhost:8080/api/v2/counters/",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						""
 					]
@@ -143,14 +143,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/1/inc",
+					"raw": "localhost:8080/api/v2/counters/1/inc",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"1",
 						"inc"
@@ -186,14 +186,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/1/dec",
+					"raw": "localhost:8080/api/v2/counters/1/dec",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"1",
 						"dec"
@@ -229,14 +229,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/3/value",
+					"raw": "localhost:8080/api/v2/counters/3/value",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"3",
 						"value"
@@ -272,14 +272,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/1/value",
+					"raw": "localhost:8080/api/v2/counters/1/value",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"1",
 						"value"
@@ -303,7 +303,7 @@
 				}
 			],
 			"request": {
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -315,14 +315,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/1/limits",
+					"raw": "localhost:8080/api/v2/counters/1/limits",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"1",
 						"limits"
@@ -362,14 +362,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/2",
+					"raw": "localhost:8080/api/v2/counters/2",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"2"
 					]
@@ -383,14 +383,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/v1/counters/1",
+					"raw": "localhost:8080/api/v2/counters/1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"counters",
 						"1"
 					]
