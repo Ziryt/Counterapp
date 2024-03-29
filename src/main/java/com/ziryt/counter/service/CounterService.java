@@ -11,22 +11,23 @@ import com.ziryt.counter.exception.ExceedIntegerException;
 import com.ziryt.counter.exception.ExceedTopLimitException;
 import com.ziryt.counter.exception.NotFoundException;
 import com.ziryt.counter.exception.NotUniqueNameException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-;
+import static com.ziryt.counter.model.mapper.Mapper.createCounterRequestToEntity;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CounterService {
 
     private final CounterRepository counterRepository;
 
-    private Counter findCounterById(Integer id) throws NotFoundException{
+    // is it ok to be public?
+    Counter findCounterById(Integer id) throws NotFoundException{
         return counterRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Counter with id=" + id + " doesn't exist", id));
     }
@@ -45,14 +46,9 @@ public class CounterService {
             throw new NotUniqueNameException("Counter with provided name already exist");
         });
 
-        Counter counter = Counter.builder()
-                .name(request.name())
-                .initialValue(request.initialValue())
-                .currentValue(request.initialValue())
-                .topLimit(request.topLimit())
-                .bottomLimit(request.bottomLimit())
-                .color(request.color())
-                .build();
+        Counter counter = createCounterRequestToEntity(request);
+        counter.setCurrentValue(request.initialValue());
+
         return counterRepository.save(counter);
     }
 

@@ -1,6 +1,7 @@
 package com.ziryt.counter.model.mapper;
 
 import com.ziryt.counter.model.DTO.CounterDTO;
+import com.ziryt.counter.model.DTO.CreateCounterRequest;
 import com.ziryt.counter.model.entity.Counter;
 import org.springframework.data.domain.Page;
 
@@ -41,6 +42,26 @@ public class Mapper {
                 .topLimit(counterDTO.topLimit())
                 .bottomLimit(counterDTO.bottomLimit())
                 .color(counterDTO.color())
+                .build();
+    }
+
+    public static CreateCounterRequest entityToCreateCounterRequest(Counter counter){
+        return new CreateCounterRequest(
+                counter.getName(),
+                counter.getInitialValue(),
+                counter.getTopLimit(),
+                counter.getBottomLimit(),
+                counter.getColor()
+        );
+    }
+
+    public static Counter createCounterRequestToEntity(CreateCounterRequest request){
+        return Counter.builder()
+                .name(request.name())
+                .initialValue(request.initialValue())
+                .topLimit(request.topLimit())
+                .bottomLimit(request.bottomLimit())
+                .color(request.color())
                 .build();
     }
 
