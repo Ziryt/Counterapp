@@ -26,8 +26,7 @@ public class CounterService {
 
     private final CounterRepository counterRepository;
 
-    // is it ok to be public?
-    Counter findCounterById(Integer id) throws NotFoundException{
+    private Counter findCounterById(Integer id) throws NotFoundException{
         return counterRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Counter with id=" + id + " doesn't exist", id));
     }

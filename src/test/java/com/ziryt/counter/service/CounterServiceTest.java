@@ -1,5 +1,8 @@
 package com.ziryt.counter.service;
 
+import com.ziryt.counter.exception.ExceedBottomLimitException;
+import com.ziryt.counter.exception.ExceedIntegerException;
+import com.ziryt.counter.exception.ExceedTopLimitException;
 import com.ziryt.counter.exception.NotFoundException;
 
 import com.ziryt.counter.exception.NotUniqueNameException;
@@ -10,7 +13,6 @@ import com.ziryt.counter.model.DTO.UpdateValueRequest;
 import com.ziryt.counter.model.entity.Counter;
 import com.ziryt.counter.repository.CounterRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -24,6 +26,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -148,6 +152,8 @@ class CounterServiceTest {
         assertThatThrownBy(() -> serviceTest.createCounter(request))
                 .isInstanceOf(NotUniqueNameException.class)
                 .hasMessageContaining("Counter with provided name already exist");
+        verify(repositoryMock, never()).save(any());
+
     }
 
 
@@ -179,6 +185,56 @@ class CounterServiceTest {
     }
 
     @Test
+    void throwsWhenExceedIntegerMaximum() {
+        // given
+        int id = 1;
+        Counter counter = Counter.builder()
+                .name("TestName")
+                .initialValue(35)
+                .currentValue(Integer.MAX_VALUE)
+                .topLimit(40)
+                .bottomLimit(20)
+                .color("green")
+                .build();
+
+        // when
+        when(repositoryMock.findById(id)).thenReturn(Optional.of(counter));
+
+        // then
+        assertThatThrownBy(() -> serviceTest.
+                incrementValue(id))
+                .isInstanceOf(ExceedIntegerException.class)
+                .hasMessageContaining("Counter reached maximum possible integer value");
+        verify(repositoryMock, never()).save(any());
+
+    }
+
+    @Test
+    void throwsWhenExceedTopLimit() {
+        // given
+        int id = 1;
+        Counter counter = Counter.builder()
+                .name("TestName")
+                .initialValue(35)
+                .currentValue(40)
+                .topLimit(40)
+                .bottomLimit(-40)
+                .color("green")
+                .build();
+
+        // when
+        when(repositoryMock.findById(id)).thenReturn(Optional.of(counter));
+
+        // then
+        assertThatThrownBy(() -> serviceTest.incrementValue(id))
+                .isInstanceOf(ExceedTopLimitException.class)
+                .hasMessageContaining("Counter can not be higher than top limit\n" +
+                        "Top limit: ");
+        verify(repositoryMock, never()).save(any());
+
+    }
+
+    @Test
     void shouldDecrementValue() {
         // given
         int id = 1;
@@ -187,7 +243,7 @@ class CounterServiceTest {
                 .initialValue(35)
                 .currentValue(35)
                 .topLimit(40)
-                .bottomLimit(20)
+                .bottomLimit(-40)
                 .color("green")
                 .build();
         Counter expected = counter.toBuilder()
@@ -208,16 +264,66 @@ class CounterServiceTest {
     }
 
     @Test
-    void shouldUpdateValueBy() {
+    void throwsWhenExceedIntegerMinimum() {
         // given
         int id = 1;
-        UpdateValueRequest request = new UpdateValueRequest(-12);
         Counter counter = Counter.builder()
                 .name("TestName")
                 .initialValue(35)
-                .currentValue(35)
+                .currentValue(Integer.MIN_VALUE)
                 .topLimit(40)
-                .bottomLimit(20)
+                .bottomLimit(-40)
+                .color("green")
+                .build();
+
+        // when
+        when(repositoryMock.findById(id)).thenReturn(Optional.of(counter));
+
+        // then
+        assertThatThrownBy(() -> serviceTest.
+                decrementValue(id))
+                .isInstanceOf(ExceedIntegerException.class)
+                .hasMessageContaining("Counter reached minimum possible integer value");
+        verify(repositoryMock, never()).save(any());
+
+    }
+
+    @Test
+    void throwsWhenExceedBottomLimit() {
+        // given
+        int id = 1;
+        Counter counter = Counter.builder()
+                .name("TestName")
+                .initialValue(35)
+                .currentValue(-40)
+                .topLimit(40)
+                .bottomLimit(-40)
+                .color("green")
+                .build();
+
+        // when
+        when(repositoryMock.findById(id)).thenReturn(Optional.of(counter));
+
+        // then
+        assertThatThrownBy(() -> serviceTest.decrementValue(id))
+                .isInstanceOf(ExceedBottomLimitException.class)
+                .hasMessageContaining("Counter can not be lower than bottom limit\n" +
+                        "Bottom limit: ");
+        verify(repositoryMock, never()).save(any());
+
+    }
+
+    @Test
+    void shouldUpdateValueUpBy() {
+        // given
+        int id = 1;
+        UpdateValueRequest request = new UpdateValueRequest(12);
+        Counter counter = Counter.builder()
+                .name("TestName")
+                .initialValue(35)
+                .currentValue(4)
+                .topLimit(40)
+                .bottomLimit(-40)
                 .color("green")
                 .build();
         Counter expected = counter.toBuilder()
@@ -238,6 +344,62 @@ class CounterServiceTest {
     }
 
     @Test
+    void shouldUpdateValueDownBy() {
+        // given
+        int id = 1;
+        UpdateValueRequest request = new UpdateValueRequest(-12);
+        Counter counter = Counter.builder()
+                .name("TestName")
+                .initialValue(35)
+                .currentValue(4)
+                .topLimit(40)
+                .bottomLimit(-40)
+                .color("green")
+                .build();
+        Counter expected = counter.toBuilder()
+                .currentValue(counter.getCurrentValue() + request.value())
+                .build();
+
+        // when
+        when(repositoryMock.findById(id)).thenReturn(Optional.of(counter));
+        serviceTest.updateValueBy(id, request);
+
+        // then
+        ArgumentCaptor<Counter> captor = ArgumentCaptor.forClass(Counter.class);
+        verify(repositoryMock).save(captor.capture());
+
+        Counter actual = captor.getValue();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void throwsWhenSumOutOfBoundaries() {
+        // given
+        int id = 1;
+        UpdateValueRequest request = new UpdateValueRequest(-1500000000);
+        Counter counter = Counter.builder()
+                .Id(id)
+                .name("TestName")
+                .initialValue(35)
+                .currentValue(-1500000000)
+                .topLimit(40)
+                .bottomLimit(-40)
+                .color("green")
+                .build();
+
+        // when
+        when(repositoryMock.findById(id)).thenReturn(Optional.of(counter));
+
+        // then
+        assertThatThrownBy(() -> serviceTest.updateValueBy(id, request))
+                .isInstanceOf(ExceedIntegerException.class)
+                .hasMessageContaining(counter.getCurrentValue() + " + " + request.value() +
+                        " is outside of Integer boundaries");
+        verify(repositoryMock, never()).save(any());
+    }
+
+    @Test
     void shouldSetValue() {
         // given
         int id = 1;
@@ -247,7 +409,7 @@ class CounterServiceTest {
                 .initialValue(35)
                 .currentValue(35)
                 .topLimit(40)
-                .bottomLimit(20)
+                .bottomLimit(-40)
                 .color("green")
                 .build();
         Counter expected = counter.toBuilder()
@@ -277,7 +439,7 @@ class CounterServiceTest {
                 .initialValue(35)
                 .currentValue(35)
                 .topLimit(40)
-                .bottomLimit(20)
+                .bottomLimit(-40)
                 .color("green")
                 .build();
         Counter expected = counter.toBuilder()
@@ -315,7 +477,7 @@ class CounterServiceTest {
                 .initialValue(35)
                 .currentValue(35)
                 .topLimit(40)
-                .bottomLimit(20)
+                .bottomLimit(-40)
                 .color("green")
                 .build();
         Counter expected = counter.toBuilder()
@@ -350,7 +512,7 @@ class CounterServiceTest {
                 .initialValue(35)
                 .currentValue(35)
                 .topLimit(40)
-                .bottomLimit(20)
+                .bottomLimit(-40)
                 .color("green")
                 .build();
 
