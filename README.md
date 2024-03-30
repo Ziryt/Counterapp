@@ -31,7 +31,7 @@ docker-compose up
 ```text
 - java 21
 - docker (DB cofigured with it, but you can configure it any other way if you willing to)
-- preferable IDE
+- preferable IDE (optional)
 ```
 #### set up database
 Could be done with `docker-compose up db-counter` command in console
