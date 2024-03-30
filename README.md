@@ -22,7 +22,7 @@ A simple counter API demo project
 #### run
 Simply download the `docker-compose.yml` and run 
 ```
-docker compose up
+docker-compose up
 ```
 
 ### with IDE
@@ -33,8 +33,14 @@ docker compose up
 - docker (DB cofigured with it, but you can configure it any other way if you willing to)
 - preferable IDE
 ```
+#### set up database
+Could be done with `docker-compose up db-counter` command in console
+
+OR
+
+With IDE UI assistance. InIntellij there is play button near correspondent service name in `docker-compose.yml`
+
 #### run
-Set up database also using docker compose either in console or with IDE UI assistance
 Run project in IDE
 
 [Back to top](#table-of-contents)
@@ -46,7 +52,7 @@ Project has OpenAPI documentation
 ```
 http//localhost:8080/swagger-ui/index.html#/
 ```
-Also here is [postman collection](https://github.com/Ziryt/Counterapp/blob/main/counters.postman_collection.json) in the project for a quick start
+Also there is [postman collection](https://github.com/Ziryt/Counterapp/blob/main/counters.postman_collection.json) in the project for a quick start
 
 
 [Back to top](#table-of-contents)
